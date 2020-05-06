@@ -23,8 +23,11 @@ const tasks = [
 ];
 
 (function (tasks) {
+  //Ссылка на контейнер для задач
   const container = document.querySelector("#tasks-container");
+  // фильтр задач
   let activeFilter = "all";
+  //функция возвращающая задачу помещенную в li
   const liTemplate = (task) => {
     const li = document.createElement("li");
     li.classList.add("list-group-item");
@@ -44,17 +47,23 @@ const tasks = [
     card.insertAdjacentElement("afterbegin", cardBody);
     li.append(card);
     const btn = document.createElement("button");
-    btn.setAttribute("id", "toggleStatus");
+    btn.setAttribute("data-action", "toggleStatus");
     if (!task.complited) {
-      btn.classList.add("btn", "btn-warning");
+      btn.classList.add("btn", "btn-success");
       btn.textContent = "Завершить";
     } else {
-      btn.classList.add("btn", "btn-danger");
+      btn.classList.add("btn", "btn-warning");
       btn.textContent = "Вернуть в статус незавершенных";
     }
+    const delteBtn = document.createElement("button");
+    delteBtn.classList.add("btn", "btn-danger");
+    delteBtn.textContent = "Удалить";
+    delteBtn.setAttribute("data-action", "delete");
     li.append(btn);
+    li.append(delteBtn);
     return li;
   };
+  //функция изменяющая значение complited c true на false или обратно
   const toggleTaskStatus = (e) => {
     e.preventDefault();
     const parent = e.target.parentNode;
@@ -65,11 +74,26 @@ const tasks = [
       }
       return task;
     });
-    console.log(taskArr);
     renderTasks(taskArr);
   };
+  // функция удаления задачи
+  const deleteTask = (e) => {
+    const parent = e.target.parentNode;
+    const id = parent.dataset.id;
+    const idx = tasks.findIndex((task) => task.id == id);
+    if (idx > 0) {
+      tasks.splice(idx, 1);
+    } else {
+      tasks.splice(idx);
+    }
+    console.log(tasks);
+    renderTasks(tasks);
+  };
+  //функция отрисовки задач, рисует в зависимости от текущего активного фильтра
   const renderTasks = (tasks) => {
     if (!tasks || !tasks.length) {
+      container.innerHTML = "";
+
       const p = document.createElement("p");
       p.classList.add("h4");
       p.textContent = "Задач пока нет";
@@ -92,9 +116,13 @@ const tasks = [
     });
     container.append(fragment);
     document
-      .querySelectorAll("#toggleStatus")
+      .querySelectorAll("[data-action='toggleStatus']")
       .forEach((el) => el.addEventListener("click", toggleTaskStatus));
+    document
+      .querySelectorAll("[data-action='delete']")
+      .forEach((el) => el.addEventListener("click", deleteTask));
   };
+  // функция вызывающая уведомление если не введено название или текст задачи
   const initAlert = () => {
     const alert = document.querySelector("#alert");
     alert.classList.add("alert-active");
@@ -102,6 +130,7 @@ const tasks = [
       alert.classList.remove("alert-active");
     });
   };
+  //функцияя сабмита формы
   const submitHandler = (e) => {
     e.preventDefault();
     const title = document.querySelector("#title");
@@ -120,19 +149,23 @@ const tasks = [
     title.value = "";
     body.value = "";
   };
+  // функцияя меняющая активный фильтр на активные задачи
   const activeTasksFilter = () => {
     activeFilter = "active";
     renderTasks(tasks);
   };
+  // функцияя меняющая активный фильтр на все задачи
   const alltasksFilter = () => {
     activeFilter = "all";
     renderTasks(tasks);
   };
-
+  // добавление слушателя на сабмит формы
   document.querySelector("form").addEventListener("submit", submitHandler);
+  // добавление слушателей на кнопки фильтрации задач
   document
     .querySelector("#taskActive")
     .addEventListener("click", activeTasksFilter);
   document.querySelector("#taskAll").addEventListener("click", alltasksFilter);
+  // начальный вызов рендера задач
   renderTasks(tasks);
 })(tasks);
