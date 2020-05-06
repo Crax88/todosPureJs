@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/darkly/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rCA2D+D9QXuP2TomtQwd+uP50EHjpafN+wruul0sXZzX/Da7Txn4tB9aLMZV4DZm"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Todo List</title>
+  </head>
+  <body>
+    <div class="container">
+      <form>
+        <fieldset>
+          <legend>Добавить задачу</legend>
+          <div class="form-group row">
+            <label for="title" class="col-sm-2 col-form-label">Название</label>
+            <div class="col-sm-10">
+              <input id="title" type="text" class="form-control" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="body">Текст задачи</label>
+            <textarea
+              id="body"
+              class="form-control"
+              id="body"
+              rows="3"
+            ></textarea>
+          </div>
+        </fieldset>
+        <button type="submit" class="btn btn-success">Добавить</button>
+      </form>
+      <div class="row header">
+        <div class="col-sm-5 h4">
+          Список Задач
+        </div>
+        <div class="col-sm-7 row justify-content-between">
+          <div class="col-sm-4">
+            <button id="taskActive" class="btn btn-primary">Активные</button>
+          </div>
+          <div class="col-sm-4">
+            <button id="taskAll" class="btn btn-primary">
+              Все
+            </button>
+          </div>
+        </div>
+      </div>
+      <ul id="tasks-container" class="list-group"></ul>
+      <div id="alert" class="alert alert-dismissible alert-warning">
+        <button
+          id="alert-close"
+          type="button"
+          class="close"
+          data-dismiss="alert"
+        >
+          &times;
+        </button>
+        <h4 class="alert-heading">Внимание!</h4>
+        <p class="mb-0">
+          Пожалуйста ведите название и текст задачи.
+        </p>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
